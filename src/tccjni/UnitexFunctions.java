@@ -32,62 +32,66 @@ public class UnitexFunctions {
 
         return null;
       }
-      private static String processUnitexWork(String othersResDir,String workingDicoFileName, String workingGraphFileName,String workingNormGrfFileName,String corpusPath,String corpusText)
+      public void NormalizeGrf(String othersResDir,String workingDicoFileName, String workingGraphFileName,String workingNormGrfFileName,String corpusPath,String corpusText){
+          String cmdNorm = "Normalize " + UnitexJni.combineUnitexFileComponentWithQuote(corpusPath,"corpus.txt") + " -r "+UnitexJni.combineUnitexFileComponentWithQuote(othersResDir,"Norm.txt") + " --output_offsets="+ UnitexJni.combineUnitexFileComponentWithQuote(corpusPath,"offset1.txt") ;
+          UnitexJni.execUnitexTool("UnitexTool " + cmdNorm);
+      }
+      public void Tokenize(String othersResDir,String workingDicoFileName, String workingGraphFileName,String workingNormGrfFileName,String corpusPath,String corpusText){
+          String cmdTok = "Tokenize " + UnitexJni.combineUnitexFileComponentWithQuote(corpusPath,"corpus.txt") + " -a "+ UnitexJni.combineUnitexFileComponentWithQuote(othersResDir,"Alphabet.txt") + " --input_offsets="+ UnitexJni.combineUnitexFileComponentWithQuote(corpusPath,"offset1.txt") + " --output_offsets="+ UnitexJni.combineUnitexFileComponentWithQuote(corpusPath,"offset2.txt") ;
+          UnitexJni.execUnitexTool("UnitexTool " + cmdTok);
+      }
+       
+      public void Dico(String othersResDir,String workingDicoFileName, String workingGraphFileName,String workingNormGrfFileName,String corpusPath,String corpusText){
+          String cmdDico = "Dico -t "+ UnitexJni.combineUnitexFileComponentWithQuote(corpusPath,"corpus.snt")+ " -a " + UnitexJni.combineUnitexFileComponentWithQuote(othersResDir,"Alphabet.txt")+" "+UnitexJni.combineUnitexFileComponentWithQuote(workingDicoFileName);
+          UnitexJni.execUnitexTool("UnitexTool " + cmdDico); 
+      }
+      public void Txt2Tfst(String othersResDir,String workingDicoFileName, String workingGraphFileName,String workingNormGrfFileName,String corpusPath,String corpusText){
+         String cmdTxt2Tfst = "Txt2Tfst " + UnitexJni.combineUnitexFileComponentWithQuote(corpusPath,"corpus.snt")+" -a " + UnitexJni.combineUnitexFileComponentWithQuote(othersResDir,"Alphabet.txt") + " --clean"; 
+         UnitexJni.execUnitexTool("UnitexTool " + cmdTxt2Tfst);
+      }
+      
+      public void Tfst2Grf(String othersResDir,String workingDicoFileName, String workingGraphFileName,String workingNormGrfFileName,String corpusPath,String corpusText){
+          String cmdTfst2Grf = "Tfst2Grf " + UnitexJni.combineUnitexFileComponentWithQuote(UnitexJni.combineUnitexFileComponent(corpusPath,"corpus_snt"),"text.tfst")+" -s1";
+          UnitexJni.execUnitexTool("UnitexTool " + cmdTfst2Grf);
+      }
+      public void Grf2Fst2(String othersResDir,String workingDicoFileName, String workingGraphFileName,String workingNormGrfFileName,String corpusPath,String corpusText){
+          String cmdGrf2Fst2 = "Grf2Fst2 " + UnitexJni.combineUnitexFileComponentWithQuote(UnitexJni.combineUnitexFileComponent(corpusPath,"corpus_snt"),"cursentence.grf");
+          UnitexJni.execUnitexTool("UnitexTool " + cmdGrf2Fst2);
+      }
+      public void Fst2List(String othersResDir,String workingDicoFileName, String workingGraphFileName,String workingNormGrfFileName,String corpusPath,String corpusText){
+          String cmdFst2List = "Fst2List "+"-l 1000 -a s -o "+UnitexJni.combineUnitexFileComponent(corpusPath, "list.txt")+" "+ UnitexJni.combineUnitexFileComponentWithQuote(UnitexJni.combineUnitexFileComponent(corpusPath,"corpus_snt"),"cursentence.fst2");
+          UnitexJni.execUnitexTool("UnitexTool " + cmdFst2List);
+      }
+      public void implodeTfst(String corpusPath){
+          String cmdImplodeTfst = "implodeTfst "+UnitexJni.combineUnitexFileComponentWithQuote(UnitexJni.combineUnitexFileComponent(corpusPath,"corpus_snt"),"text.tfst");
+          UnitexJni.execUnitexTool("UnitexTool "+cmdImplodeTfst);
+      }
+      public void deleteFolder(String folder){
+          UnitexJni.removeUnitexFolder(folder);
+      }
+      private String processUnitexWork(String othersResDir,String workingDicoFileName, String workingGraphFileName,String workingNormGrfFileName,String corpusPath,String corpusText)
       {
           String pSep = pathSeparator;
           UnitexJni.writeUnitexFile(UnitexJni.combineUnitexFileComponent(corpusPath,"corpus.txt"),corpusText);
 		  
 		  // we create offsets file offset1.txt and offset2.txt to get position against the original corpus in the xml file
-
-          String cmdNorm = "Normalize " + UnitexJni.combineUnitexFileComponentWithQuote(corpusPath,"corpus.txt") + " -r "+UnitexJni.combineUnitexFileComponentWithQuote(othersResDir,"Norm.txt") + " --output_offsets="+ UnitexJni.combineUnitexFileComponentWithQuote(corpusPath,"offset1.txt") ;
-          String cmdTok = "Tokenize " + UnitexJni.combineUnitexFileComponentWithQuote(corpusPath,"corpus.txt") + " -a "+ UnitexJni.combineUnitexFileComponentWithQuote(othersResDir,"Alphabet.txt") + " --input_offsets="+ UnitexJni.combineUnitexFileComponentWithQuote(corpusPath,"offset1.txt") + " --output_offsets="+ UnitexJni.combineUnitexFileComponentWithQuote(corpusPath,"offset2.txt") ;
-          String cmdDico = "Dico -t "+ UnitexJni.combineUnitexFileComponentWithQuote(corpusPath,"corpus.snt")+ " -a " + UnitexJni.combineUnitexFileComponentWithQuote(othersResDir,"Alphabet.txt")+" "+UnitexJni.combineUnitexFileComponentWithQuote(workingDicoFileName);
-          String cmdTxt2Tfst = "Txt2Tfst " + UnitexJni.combineUnitexFileComponentWithQuote(corpusPath,"corpus.snt")+" -a " + UnitexJni.combineUnitexFileComponentWithQuote(othersResDir,"Alphabet.txt") + " --clean";
-          String cmdTfst2Grf = "Tfst2Grf " + UnitexJni.combineUnitexFileComponentWithQuote(UnitexJni.combineUnitexFileComponent(corpusPath,"corpus_snt"),"text.tfst")+" -s1";
-          String cmdGrf2Fst2 = "Grf2Fst2 " + UnitexJni.combineUnitexFileComponentWithQuote(UnitexJni.combineUnitexFileComponent(corpusPath,"corpus_snt"),"cursentence.grf");
-          String cmdFst2List = "Fst2List "+"-l 1000 -a s -o "+UnitexJni.combineUnitexFileComponent(corpusPath, "list.txt")+" "+ UnitexJni.combineUnitexFileComponentWithQuote(UnitexJni.combineUnitexFileComponent(corpusPath,"corpus_snt"),"cursentence.fst2");
-          //String cmdFst2List = "Fst2List -l 100 -a s -o "+"/home/thiago/workspace/Unitex-GramLab/Unitex/Portuguese (Brazil)/list.txt"+" "+"/home/thiago/NetBeansProjects/tccjni/src/tccjni/workUnitex0/corpus_snt/cursentence.fst2";
-          // Fst2List -l 100 -a s -s ", " -o "/home/thiago/workspace/Unitex-GramLab/Unitex/Portuguese (Brazil)/list.txt" "/home/thiago/NetBeansProjects/tccjni/src/tccjni/workUnitex0/corpus_snt/cursentence.fst2" 
-          //String cmdTxt2Tsft = "Txt2Tsft "+ "\"-a./demojnires/others/Alphabet.txt\""+" --clean "+"\"./workUnitex0/corpus.snt\"";
-          //"/home/thiago/Unitex-GramLab-3.1/App/UnitexToolLogger" Txt2Tfst "/home/thiago/temp/textoteste.snt" "-a/home/thiago/workspace/Unitex-GramLab/Unitex/Portuguese (Brazil)/Alphabet.txt" --clean
-          //String cmdLocate = "Locate -t "+UnitexJni.combineUnitexFileComponentWithQuote(corpusPath,"corpus.snt")+ " " + UnitexJni.combineUnitexFileComponentWithQuote(workingGraphFileName)+ " -a " + UnitexJni.combineUnitexFileComponentWithQuote(othersResDir,"Alphabet.txt")+ " -L -R --all -b -Y";
-          //String cmdConcord = "Concord "+ UnitexJni.combineUnitexFileComponentWithQuote(corpusPath,"corpus_snt","concord.ind")+ " -m " + UnitexJni.combineUnitexFileComponentWithQuote(corpusPath,"corpus.txt") ;
-
-          //String cmdConcordXml = "Concord "+ UnitexJni.combineUnitexFileComponentWithQuote(corpusPath,"corpus_snt","concord.ind")+  
-          //	  " --uima="+ UnitexJni.combineUnitexFileComponentWithQuote(corpusPath,"offset2.txt") +" --xml";
-
-      
-	  
-                              UnitexJni.execUnitexTool("UnitexTool " + cmdNorm);
-                              UnitexJni.execUnitexTool("UnitexTool " + cmdTok);
-          int testecontrole = UnitexJni.execUnitexTool("UnitexTool " + cmdDico);                    
-          int teste =         UnitexJni.execUnitexTool("UnitexTool " + cmdTxt2Tfst);
-          int teste2 =        UnitexJni.execUnitexTool("UnitexTool " + cmdTfst2Grf);
-          int teste3 =        UnitexJni.execUnitexTool("UnitexTool " + cmdGrf2Fst2);
-          int teste4 =        UnitexJni.execUnitexTool("UnitexTool " + cmdFst2List);
+          NormalizeGrf(othersResDir, workingDicoFileName, workingGraphFileName, workingNormGrfFileName, corpusPath, corpusText);
+          Tokenize(othersResDir, workingDicoFileName, workingGraphFileName, workingNormGrfFileName, corpusPath, corpusText);
+          Dico(othersResDir, workingDicoFileName, workingGraphFileName, workingNormGrfFileName, corpusPath, corpusText);
+          Txt2Tfst(othersResDir, workingDicoFileName, workingGraphFileName, workingNormGrfFileName, corpusPath, corpusText);
           
-          System.out.println(cmdFst2List);
+          //implodeTfst(corpusPath);
           
-          System.out.println(testecontrole);
-          System.out.println(teste);
-          System.out.println(teste2);
-          System.out.println(teste3);
-          System.out.println(teste4);
-          //UnitexJni.execUnitexTool("UnitexTool " + cmdLocate);
-          //UnitexJni.execUnitexTool("UnitexTool " + cmdConcord);
-          //UnitexJni.execUnitexTool("UnitexTool " + cmdConcordXml);
-
-          // these 6 lines can be replaced by only one execution (with very small speed improvement)
-          /*
-          UnitexJni.execUnitexTool("UnitexTool { " + cmdNorm + " } { " + cmdTok + " } { " + cmdDico + " } { "  + cmdLocate + " } { " + cmdConcord + " } { " + cmdConcord2+ " }");
-
-          */
-
+          Tfst2Grf(othersResDir, workingDicoFileName, workingGraphFileName, workingNormGrfFileName, corpusPath, corpusText);
+          Grf2Fst2(othersResDir, workingDicoFileName, workingGraphFileName, workingNormGrfFileName, corpusPath, corpusText);
+          Fst2List(othersResDir, workingDicoFileName, workingGraphFileName, workingNormGrfFileName, corpusPath, corpusText);
+          
+         
           String merged =  UnitexJni.getUnitexFileString(UnitexJni.combineUnitexFileComponent(corpusPath,"corpus.txt"));
           String xml = UnitexJni.getUnitexFileString(UnitexJni.combineUnitexFileComponent(corpusPath,"corpus_snt","concord.xml"));
           return xml;
       }
-      public static void teste(String [] args, String text, int nbCosrpusWorkPath) {
+      public void configUnitex(String [] args, String text, int nbCosrpusWorkPath) {
           
         //exemplos = ExemplosCollection.getListaExemplos();
         //System.out.println(UnitexJni.combineUnitexFileComponent("A","b","c"));

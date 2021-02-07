@@ -5,6 +5,7 @@
  */
 package view;
 
+import javax.swing.JEditorPane;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JTextPane;
@@ -20,7 +21,9 @@ public class TelaPrincipalView extends javax.swing.JFrame {
      */
     public TelaPrincipalView() {
         initComponents();
-        caixaTexto.setEditable(false);
+        
+        caixaTexto.setEditable(true);
+        //caixaTexto.setContentType("txt/html");
     }
 
     /**
@@ -79,8 +82,8 @@ public class TelaPrincipalView extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 436, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(24, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 504, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

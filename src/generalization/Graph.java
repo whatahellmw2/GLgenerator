@@ -7,14 +7,17 @@ package generalization;
 
 import dao.AbrirArquivoTexto;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import presenter.DirectorySelectorPresenter;
 
 /**
  *
@@ -23,6 +26,11 @@ import java.util.ArrayList;
 public class Graph {
     private String caminho = "/home/thiago/NetBeansProjects/tccjni/src/generalization/grfTemplate.grf";
     private Path path = (Path)Paths.get("grfTemplate.grf");
+    private String graph;
+
+    public String getGraph() {
+        return graph;
+    }
     public Graph(int numNodes, ArrayList<Episode> episodes) throws IOException{
        // AbrirArquivoTexto.lerArquivo(path);
        //System.out.println("imprindo arquivo gtf: "+ AbrirArquivoTexto.lerArquivo(path));
@@ -36,6 +44,7 @@ public class Graph {
            oldContent = oldContent + line + System.lineSeparator();
            line=reader.readLine();
        }
+       reader.close();
        oldContent = oldContent + (numNodes+2) + System.lineSeparator();//set number of nodes on the graph
        int f=0;
        int cont=0;
@@ -92,7 +101,9 @@ public class Graph {
            j++;
        }
        System.out.println(oldContent);
+       graph=oldContent; 
        
+        
     }
     
 }

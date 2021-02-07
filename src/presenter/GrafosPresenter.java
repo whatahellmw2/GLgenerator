@@ -13,6 +13,9 @@ import generalization.FrequencyComputer;
 import generalization.Graph;
 import generalization.LowFrequencyRemover;
 import generalization.RedundancyRemover;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -29,14 +32,25 @@ public class GrafosPresenter {
     private static ArrayList<Event>  events= new ArrayList<>();
     private static ArrayList<Episode> episodes = new ArrayList<>();
     private RedundancyRemover remover;
-   
-    public void testarLib(){
+    private Graph graph;
+    public void createFSTList(){
         this.exemplos=ExemplosCollection.getListaExemplos();
         String[] arguments;
          arguments = new String[0];
+         
          for (int i=0;i< this.exemplos.size();i++) {
-             UnitexFunctions.teste(arguments,this.exemplos.get(i),i);
+             new UnitexFunctions().configUnitex(arguments,this.exemplos.get(i),i);
+             
         }
+    }
+    public void deleteFiles(){
+        for (int i=0;i< this.exemplos.size();i++) {
+             new UnitexFunctions().deleteFolder("workUnitex"+i);
+             
+        }
+    }
+    public void constructGraph(){
+        this.createFSTList();
         try {
             LerSequenciasDeExemplos.lerSquencias();            
             new EventAdapter().removeInflection(events);
@@ -49,12 +63,30 @@ public class GrafosPresenter {
             //LowFrequencyRemover.setThreshhold(exemplos.size());
             LowFrequencyRemover.setThreshhold(2);
             LowFrequencyRemover.removeLowFrequency(remover.getSet(), episodes, events);
-            new Graph(events.size(), episodes);
+            graph=new Graph(events.size(), episodes);
+            saveGraph();
         } catch (IOException ex) {
             Logger.getLogger(GrafosPresenter.class.getName()).log(Level.SEVERE, null, ex);
         }
-     }
-    
+        //deleteFiles();
+    }
+    public void saveGraph() throws IOException{
+        DirectorySelectorPresenter selector= new DirectorySelectorPresenter();
+        File slectedPath = selector.selectFolder();
+        if(slectedPath==null){
+            selector.dispose();
+            selector=null;
+            saveGraph();
+        }else{
+            File newFile = new File(slectedPath.toString()+".grf");
+            FileWriter newFileWriter = new FileWriter(newFile);       
+            BufferedWriter bWriter = new BufferedWriter(newFileWriter);
+            bWriter.write(graph.getGraph());
+
+            bWriter.close();
+            newFileWriter.close();
+        }
+        }
     public void printEvents(){
          System.out.println("imprimindo array de eventos: ");
             for(Event e: events){
