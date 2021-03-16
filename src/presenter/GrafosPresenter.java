@@ -11,6 +11,8 @@ import generalization.Event;
 import generalization.EventAdapter;
 import generalization.FrequencyComputer;
 import generalization.Graph;
+import generalization.GraphPreparer;
+import generalization.LiteralFrequency;
 import generalization.LowFrequencyRemover;
 import generalization.RedundancyRemover;
 import java.io.BufferedWriter;
@@ -21,7 +23,6 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import tccjni.UnitexFunctions;
-import tccjni.UnitexJniDemo;
 
 /**
  *
@@ -55,14 +56,16 @@ public class GrafosPresenter {
             LerSequenciasDeExemplos.lerSquencias();            
             new EventAdapter().removeInflection(events);
             new EventAdapter().removeGrammaticalCodes(events);
-            new EventAdapter().removeLemma(events);
+            new EventAdapter().removeLemma(events);           
             remover = new RedundancyRemover(events);//cria um set de eventos considerando tipo e posição 
             remover.printSet();
             FrequencyComputer.computeFrequency(remover.getSet(), events);//calcula o numero de ocorrencias
-            //remover.printSet();
-            //LowFrequencyRemover.setThreshhold(exemplos.size());
+            remover.printSet();
+            LowFrequencyRemover.setThreshhold(exemplos.size());
             LowFrequencyRemover.setThreshhold(2);
             LowFrequencyRemover.removeLowFrequency(remover.getSet(), episodes, events);
+            LiteralFrequency.computeFrequency(episodes);
+            GraphPreparer.prepareGraph(episodes);
             graph=new Graph(events.size(), episodes);
             saveGraph();
         } catch (IOException ex) {

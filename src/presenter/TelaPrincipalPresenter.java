@@ -28,7 +28,7 @@ public class TelaPrincipalPresenter {
     private ExemplosCollection collection = new ExemplosCollection();
     
     public static void main(String args[]) {
-        System.setProperty("java.library.path", "C:\\Users\\hiago\\Documents\\NetBeansProjects\\tcc2\\src\\DLLJNI\\UnitexJni.dll");
+        System.setProperty("java.library.path", "/home/thiago/NetBeansProjects/GLgenerator/src/tccjni/");
         //System.out.println(System.getProperty("java.library.path"));
         
         new TelaPrincipalPresenter();

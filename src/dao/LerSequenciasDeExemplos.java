@@ -36,14 +36,14 @@ public class LerSequenciasDeExemplos {
                     new FileInputStream(file),"UTF-16LE"));
                  
                  String linha;
-                 Pattern p = Pattern.compile("\\{(.*?)\\}");
+                 Pattern p = Pattern.compile("\\{(.*?)\\}");//pega cada evento dentro de um episódio
                  
                  while((linha = readFile.readLine())!= null){                 
                  Matcher m = p.matcher(linha);
                  
                  //System.out.println("\n Linha da leitura "+linha+"boolean "+m.find()+" palavra ");
                  Episode newEpidose = new Episode();
-                 newEpidose.setSentenceNumber(i);
+                 newEpidose.setSentenceNumber(i);//para identificar de qual exemplo esse episódio veio
                  newEpidose.setInitPosition(0);
                  int contPosition=0;
                  while(m.find()){

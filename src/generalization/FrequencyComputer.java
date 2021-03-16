@@ -14,7 +14,24 @@ import java.util.HashSet;
  */
 public class FrequencyComputer {
   
-    public static void computeFrequency(HashSet<Event> eventsSetp, ArrayList<Event> Eventp){
+    /*public static void computeFrequency(HashSet<Event> eventsSetp, ArrayList<Event> Eventp){
+      for(Event e: Eventp){
+          if(eventsSetp.contains(e)){
+              for(Event e2: eventsSetp ){
+                  if(e2.equals(e)){
+                      //e2.setFrequency(e2.getFrequency()+1);
+                      if(!e2.getSentences().contains(e.getSentenceNumber()))
+                        e2.addSentence(e.getSentenceNumber());
+                  }
+              }
+          }
+              
+      }
+      for(Event e: eventsSetp){
+          e.setFrequency(e.getSentences().size());
+      } 
+    }*/
+   public static void computeFrequency(HashSet<Event> eventsSetp, ArrayList<Event> Eventp){
       for(Event e: Eventp){
           if(eventsSetp.contains(e)){
               for(Event e2: eventsSetp ){

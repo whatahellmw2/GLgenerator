@@ -6,6 +6,7 @@
 package generalization;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Objects;
 
 
@@ -24,6 +25,31 @@ public class Event {
     private String grammaticalCodes;
     private String literal;
     private String lemma;
+    private boolean literalGen;
+    private int literalFrequency;
+    private HashSet<Event> children = new HashSet<Event>();
+
+    public HashSet<Event> getChildren() {
+        return children;
+    }
+
+    public boolean isLiteralGen() {
+        return literalGen;
+    }
+
+    public void setLiteralGen(boolean literalGen) {
+        this.literalGen = literalGen;
+    }
+    
+
+    public int getLiteralFrequency() {
+        return literalFrequency;
+    }
+
+    public void setLiteralFrequency(int literalFrequency) {
+        this.literalFrequency = literalFrequency;
+    }
+    
 
     public void setInflections(String inflections) {
         this.inflections = inflections;

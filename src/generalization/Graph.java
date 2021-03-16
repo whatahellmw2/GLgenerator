@@ -24,7 +24,9 @@ import presenter.DirectorySelectorPresenter;
  * @author thiago
  */
 public class Graph {
-    private String caminho = "/home/thiago/NetBeansProjects/tccjni/src/generalization/grfTemplate.grf";
+    //private String caminho = "/home/thiago/NetBeansProjects/tccjni/src/generalization/grfTemplate.grf";
+    private String caminho = "/home/thiago/NetBeansProjects/GLgenerator/src/generalization/grfTemplate.grf";
+    
     private Path path = (Path)Paths.get("grfTemplate.grf");
     private String graph;
 

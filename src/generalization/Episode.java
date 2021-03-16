@@ -16,7 +16,7 @@ public class Episode {
     private int sentenceNumber;//de qual sentença esse episódio veio
     private int initPosition;
     private int endPosition;
-    private int frequency;
+    private int frequency;   
 
     public void setSentenceNumber(int sentenceNumber) {
         this.sentenceNumber = sentenceNumber;
@@ -45,9 +45,9 @@ public class Episode {
         this.endPosition = endPosition;
     }
     public void printEpisode(){
-        System.out.println("\n initPosition: "+ initPosition);
+        System.out.println("\n initPosition: "+ initPosition);        
         for(Event e: sequenceEvents){
-            System.out.print(e.getEventType()+" ");
+            System.out.print(e.getEventType()+"\\"+e.getLiteralFrequency()+" ");
         }
         System.out.println("\n endPositon: "+ endPosition);
         
