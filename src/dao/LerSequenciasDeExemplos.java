@@ -26,12 +26,11 @@ import presenter.GrafosPresenter;
  */
 public class LerSequenciasDeExemplos {
      public static void lerSquencias() throws IOException{
-         for(int i=0; i<ExemplosCollection.getQuantidadeExemplos();i++){
-         //for(int i=0;i<=1;i++){
+         //for(int i=0; i<ExemplosCollection.getQuantidadeExemplos();i++){
+          for(int i=0; i<2;i++){
              try {
-                 File file = new File ("../tccjni/workUnitex"+i+"/list.txt");
+                 File file = new File ("../tccjni/workUnitex"+i+"/list.txt");                 
                  
-                 //FileReader file = new FileReader("../tccjni/workUnitex"+i+"/list.txt");
                  BufferedReader readFile = new BufferedReader(new InputStreamReader(
                     new FileInputStream(file),"UTF-16LE"));
                  
@@ -41,22 +40,19 @@ public class LerSequenciasDeExemplos {
                  while((linha = readFile.readLine())!= null){                 
                  Matcher m = p.matcher(linha);
                  
-                 //System.out.println("\n Linha da leitura "+linha+"boolean "+m.find()+" palavra ");
-                 Episode newEpidose = new Episode();
-                 newEpidose.setSentenceNumber(i);//para identificar de qual exemplo esse episódio veio
-                 newEpidose.setInitPosition(0);
+                 
+                 Episode newEpidose = new Episode();                 
                  int contPosition=0;
                  while(m.find()){
-                    Event newEvent = new Event();
-                    newEvent.setSentenceNumber(i); 
+                    Event newEvent = new Event();                    
                     newEvent.setEventType(m.group(1));
                     newEvent.setPosition(contPosition);
                     GrafosPresenter.addEvent(newEvent);
                     newEpidose.addSequenceEvents(newEvent);
-                    //System.out.println(m.group(1));
+                    
                     contPosition++;
                  }
-                 newEpidose.setEndPosition(contPosition-1);
+                 newEpidose.setTamananho(contPosition);
                  GrafosPresenter.addEpisode(newEpidose);
                  }
                  
@@ -65,8 +61,6 @@ public class LerSequenciasDeExemplos {
              }
              
          }
-         
-         
          
      }
 }

@@ -9,17 +9,14 @@ import dao.LerSequenciasDeExemplos;
 import generalization.Episode;
 import generalization.Event;
 import generalization.EventAdapter;
-import generalization.FrequencyComputer;
+import generalization.Generalizer;
 import generalization.Graph;
-import generalization.GraphPreparer;
-import generalization.LiteralFrequency;
-import generalization.LowFrequencyRemover;
-import generalization.RedundancyRemover;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import tccjni.UnitexFunctions;
@@ -31,8 +28,7 @@ import tccjni.UnitexFunctions;
 public class GrafosPresenter {
     private ArrayList<String> exemplos;//copia da lista de exemplos
     private static ArrayList<Event>  events= new ArrayList<>();
-    private static ArrayList<Episode> episodes = new ArrayList<>();
-    private RedundancyRemover remover;
+    private static ArrayList<Episode> episodes = new ArrayList<>(); 
     private Graph graph;
     public void createFSTList(){
         this.exemplos=ExemplosCollection.getListaExemplos();
@@ -50,24 +46,32 @@ public class GrafosPresenter {
              
         }
     }
+    void imprimirEpidosios(){
+          for(Episode ep:episodes){
+                System.out.println("\n");
+                for(Event ev:ep.getSequenceEvents()){
+                    //System.out.print("  "+ev.getEventType() );
+                    ev.printEvent();
+                }
+            }
+           System.out.println("\n\n");
+    }
     public void constructGraph(){
         this.createFSTList();
         try {
-            LerSequenciasDeExemplos.lerSquencias();            
-            new EventAdapter().removeInflection(events);
-            new EventAdapter().removeGrammaticalCodes(events);
-            new EventAdapter().removeLemma(events);           
-            remover = new RedundancyRemover(events);//cria um set de eventos considerando tipo e posição 
-            remover.printSet();
-            FrequencyComputer.computeFrequency(remover.getSet(), events);//calcula o numero de ocorrencias
-            remover.printSet();
-            LowFrequencyRemover.setThreshhold(exemplos.size());
-            LowFrequencyRemover.setThreshhold(2);
-            LowFrequencyRemover.removeLowFrequency(remover.getSet(), episodes, events);
-            LiteralFrequency.computeFrequency(episodes);
-            GraphPreparer.prepareGraph(episodes);
-            graph=new Graph(events.size(), episodes);
-            saveGraph();
+            LerSequenciasDeExemplos.lerSquencias();          
+            imprimirEpidosios();
+            
+            EventAdapter adapter = new EventAdapter();            
+            for(Episode ep: episodes){
+               adapter.adaptEvent(ep.getSequenceEvents()); 
+            }
+           imprimirEpidosios();
+            Generalizer generalizer = new Generalizer();            
+            ArrayList<Map<String,Integer>> solution = generalizer.gen(episodes);
+            Graph graph = new Graph();
+            graph.constructGraph(solution);
+            
         } catch (IOException ex) {
             Logger.getLogger(GrafosPresenter.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -89,20 +93,15 @@ public class GrafosPresenter {
             bWriter.close();
             newFileWriter.close();
         }
-        }
-    public void printEvents(){
-         System.out.println("imprimindo array de eventos: ");
-            for(Event e: events){
-                e.printEvent();
-            }
     }
+
     
-    public void printEpisodes(){
-         System.out.println("imprimindo array de episodios: ");
-            for(Episode e: episodes){
-                e.printEpisode();
-            }
-    }
+//    public void printEpisodes(){
+//         System.out.println("imprimindo array de episodios: ");
+//            for(Episode e: episodes){
+//                e.printEpisode();
+//            }
+//    }
     public static void addEvent(Event eventp ){
         events.add(eventp);
     }         

@@ -14,53 +14,48 @@ import java.util.regex.Pattern;
  * @author thiago
  */
 public class EventAdapter {
-    public void removeInflection(ArrayList<Event> events){
-        Pattern p = Pattern.compile(":.*");
-        
-        for(Event e: events){
-            Matcher m = p.matcher(e.getEventType());
-            
-            if(m.find())            
-            e.setInflections(m.group());
-            
-            
-            String teste = m.replaceFirst("");
-            e.setEventType(teste);
-            //System.out.println("teste string: "+ teste);
-            //System.out.println("inflections: "+ e.getInflections());
+    public void adaptEvent(ArrayList<Event> events){
+        for(Event ev: events){
+            detachLiteral(ev);            
+            detachLemma(ev);
+            detachGrammaticalCodes(ev);  
+            detachInflection(ev);
+                      
         }
     }
-    public void removeGrammaticalCodes(ArrayList<Event> events){
-        Pattern p = Pattern.compile("\\.(.*)");
-        
-        for(Event e: events){
-            Matcher m = p.matcher(e.getEventType());
+    private void detachLiteral(Event ev){
+        Pattern p = Pattern.compile("(.*),");    
+        Matcher m = p.matcher(ev.getEventType());
+        if(m.find())            
+        ev.setLiteral(m.group(1));
+    }
+   
+    private void detachLemma(Event ev){
+    Pattern p = Pattern.compile(",(.*)\\.");    
+        Matcher m = p.matcher(ev.getEventType());
+        if(m.find())            
+        ev.setLemma(m.group(1));        
+    
+    }
+    
+    private void detachGrammaticalCodes(Event ev){
+        Pattern p = Pattern.compile("\\.(.*):");        
+       
+            Matcher m = p.matcher(ev.getEventType());
             
             if(m.find())            
-            e.setGrammaticsCodes(m.group(1));
-            
-            String teste = m.replaceFirst("");
-            e.setEventType(teste);
-            //System.out.println("teste string: "+ teste);
-            //System.out.println("Grammatical Codes: "+ e.getGrammaticsCodes());
-        }
+            ev.setGrammaticalCodes(m.group(1));            
+           
     }
-    public void removeLemma(ArrayList<Event> events){
-        Pattern p = Pattern.compile(",.*");
         
-        for(Event e: events){
-            Matcher m = p.matcher(e.getEventType());
-            
-            if(m.find())            
-            e.setLemma(m.group().replace(",", "+"));
-            
-            String teste = m.replaceFirst("");
-            e.setEventType(teste);
-            e.setLiteral(teste);
-            e.setEventType(e.getLiteral()+e.getLemma()+"+<"+e.getGrammaticsCodes()+">");
-            //System.out.println(e.getEventType());
-            //System.out.println("teste string: "+ teste);
-            //System.out.println("Lemma: "+ e.getLemma());
-        }
+    private void detachInflection(Event ev){
+        Pattern p = Pattern.compile(":(.*)\\}"); 
+        Matcher m = p.matcher(ev.getEventType());
+        if(m.find())            
+        ev.setInflections(m.group(1));
     }
+    
+
+    
+
 }

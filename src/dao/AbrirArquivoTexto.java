@@ -17,6 +17,5 @@ public class AbrirArquivoTexto {
     public static String lerArquivo  (Path caminho) throws IOException{
         String dados = new String(Files.readAllBytes(caminho));        
         return dados;
-    }
-    
+    }    
 }

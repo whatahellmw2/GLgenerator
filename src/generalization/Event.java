@@ -15,49 +15,45 @@ import java.util.Objects;
  *
  * @author thiago
  */
-public class Event {    
-    private String eventType;
-    private int position;
-    private int eventSequence;
-    private int sentenceNumber;
-    private int frequency;
+public class Event implements Comparable<Event>{    
+    private String eventType;   
     private String inflections;
-    private String grammaticalCodes;
-    private String literal;
+    private String grammaticalCodes;    
     private String lemma;
-    private boolean literalGen;
-    private int literalFrequency;
-    private HashSet<Event> children = new HashSet<Event>();
+    private String literal;
+    private int position;
+    private int frequency;
 
-    public HashSet<Event> getChildren() {
-        return children;
+    public int getFrequency() {
+        return frequency;
     }
 
-    public boolean isLiteralGen() {
-        return literalGen;
-    }
-
-    public void setLiteralGen(boolean literalGen) {
-        this.literalGen = literalGen;
+    public void setFrequency(int frequency) {
+        this.frequency = frequency;
     }
     
-
-    public int getLiteralFrequency() {
-        return literalFrequency;
+    public String getGrammaticalCodes() {
+        return grammaticalCodes;
     }
 
-    public void setLiteralFrequency(int literalFrequency) {
-        this.literalFrequency = literalFrequency;
+    public void setGrammaticalCodes(String grammaticalCodes) {
+        this.grammaticalCodes = grammaticalCodes;
+    }
+
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
     }
     
-
+    
     public void setInflections(String inflections) {
         this.inflections = inflections;
     }
 
-    public void setGrammaticsCodes(String grammaticsCodes) {
-        this.grammaticalCodes = grammaticsCodes;
-    }
+   
 
     public void setLiteral(String literal) {
         this.literal = literal;
@@ -71,43 +67,15 @@ public class Event {
         return inflections;
     }
 
-    public String getGrammaticsCodes() {
-        return grammaticalCodes;
-    }
-
     public String getLiteral() {
         return literal;
     }
 
     public String getLemma() {
         return lemma;
-    }
+    }    
     
-    private ArrayList<Integer> sentences= new ArrayList<>();
-    
-    public void addSentence(int sentenceNumberp){
-        sentences.add(sentenceNumberp);
-    }
 
-    public ArrayList<Integer> getSentences() {
-        return sentences;
-    }
-    public int getFrequency() {
-        return frequency;
-    }
-
-    public int getSentenceNumber() {
-        return sentenceNumber;
-    }
-
-    public void setFrequency(int frequency) {
-        this.frequency = frequency;
-    }
-
-    public void setSentenceNumber(int sentenceNumber) {
-        this.sentenceNumber = sentenceNumber;
-    }
-    
     public String getEventType() {
         return eventType;
     }
@@ -116,35 +84,46 @@ public class Event {
         this.eventType = eventType;
     }
 
-    public int getPosition() {
-        return position;
-    }
-
-    public void setPosition(int position) {
-        this.position = position;
-    }
-    public void printEvent(){
-        System.out.println("grammatics codes:"+ this.grammaticalCodes);
-        System.out.println("event type: "+ this.eventType);
-        System.out.println("position: "+ this.position);
-        System.out.println("Frequency: "+ this.frequency);
-    }
-
-    /**
-     *
-     * @param obj
-     * @return
-     */
-    @Override
-    public boolean equals(Object obj){
-        Event e = (Event) obj;        
-        return this.grammaticalCodes.equals(e.getGrammaticsCodes()) && this.position == e.getPosition();
-    }
-
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 73 * hash + Objects.hashCode(this.eventType);
+        hash = 23 * hash + Objects.hashCode(this.eventType);
         return hash;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Event other = (Event) obj;
+        if (!Objects.equals(this.eventType, other.eventType)) {
+            return false;
+        }
+        
+        return true;
+    }
+
+    
+
+    @Override
+    public int compareTo(Event t) {
+        return Integer.compare(this.frequency, t.getFrequency());
+    }
+    
+   public void printEvent(){
+       System.out.println("\n");
+       System.out.println("event type "+this.eventType);
+       System.out.println("literal "+this.literal);
+       System.out.println("lema "+this.lemma);
+       System.out.println("code "+this.grammaticalCodes);
+       System.out.println("inflections  "+this.inflections);
+       
+   }
 }

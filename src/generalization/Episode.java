@@ -13,45 +13,26 @@ import java.util.ArrayList;
  */
 public class Episode {
     private ArrayList<Event> sequenceEvents;
-    private int sentenceNumber;//de qual sentença esse episódio veio
-    private int initPosition;
-    private int endPosition;
-    private int frequency;   
-
-    public void setSentenceNumber(int sentenceNumber) {
-        this.sentenceNumber = sentenceNumber;
-    }
-    
-    public Episode(){
-        sequenceEvents = new ArrayList<>();
-    }
+    private int tamananho;
+            
+      public Episode(){
+        this.sequenceEvents= new ArrayList<>();
+        }
+      
     public void addSequenceEvents(Event eventp) {
         sequenceEvents.add(eventp);
     }
 
     public ArrayList<Event> getSequenceEvents() {
         return sequenceEvents;
-    }
-    
-    public void setOriginSentence(int originSentence) {
-        this.sentenceNumber = originSentence;
+    } 
+
+    public int getTamananho() {
+        return tamananho;
     }
 
-    public void setInitPosition(int initPosition) {
-        this.initPosition = initPosition;
+    public void setTamananho(int tamananho) {
+        this.tamananho = tamananho;
     }
-
-    public void setEndPosition(int endPosition) {
-        this.endPosition = endPosition;
-    }
-    public void printEpisode(){
-        System.out.println("\n initPosition: "+ initPosition);        
-        for(Event e: sequenceEvents){
-            System.out.print(e.getEventType()+"\\"+e.getLiteralFrequency()+" ");
-        }
-        System.out.println("\n endPositon: "+ endPosition);
-        
-    }
-    
     
 }

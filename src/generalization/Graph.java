@@ -10,6 +10,7 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -17,6 +18,7 @@ import java.io.InputStreamReader;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Map;
 import presenter.DirectorySelectorPresenter;
 
 /**
@@ -24,7 +26,7 @@ import presenter.DirectorySelectorPresenter;
  * @author thiago
  */
 public class Graph {
-    //private String caminho = "/home/thiago/NetBeansProjects/tccjni/src/generalization/grfTemplate.grf";
+    
     private String caminho = "/home/thiago/NetBeansProjects/GLgenerator/src/generalization/grfTemplate.grf";
     
     private Path path = (Path)Paths.get("grfTemplate.grf");
@@ -33,8 +35,10 @@ public class Graph {
     public String getGraph() {
         return graph;
     }
-    public Graph(int numNodes, ArrayList<Episode> episodes) throws IOException{
-       // AbrirArquivoTexto.lerArquivo(path);
+    public void constructGraph(ArrayList<Map<String,Integer>> solution) throws FileNotFoundException, IOException{       
+        int solutionSize=solution.size();
+
+        // AbrirArquivoTexto.lerArquivo(path);
        //System.out.println("imprindo arquivo gtf: "+ AbrirArquivoTexto.lerArquivo(path));
        File fileToBeModified = new File(caminho);
        String oldContent = "";
@@ -47,65 +51,47 @@ public class Graph {
            line=reader.readLine();
        }
        reader.close();
-       oldContent = oldContent + (numNodes+2) + System.lineSeparator();//set number of nodes on the graph
+       oldContent = oldContent + (solutionSize+2) + System.lineSeparator();//set number of nodes on the graph
        int f=0;
-       int cont=0;
-       String nodes="";
-       for(Episode ep:episodes){
-           int i=0;
-           for(Event ev: ep.getSequenceEvents()){
-               if(i==0){
-               //oldContent = oldContent +"\"<E>\" "+ (110*i+20) +" " +(35*j+30) +" "+"1 " 
-               //         +"2 "+System.lineSeparator();
-               nodes=nodes+(f+2)+" ";    
-               cont++;    
-               }
-               f++;
-               i++;
-           }       
+       //começa com 2 estados o inicial 0 e o final 1
+       int currentStateNumber=1;       
+       //palavraReconhecida posicaoX posicaoY numTransicoesSaída nosAlcançaveis
+       
+       //initial state
+       oldContent = oldContent + "<E>" + " 20" + " 300 " + solution.get(0).size();
+       for(String chaves:solution.get(0).keySet()){
+           oldContent = oldContent + " " + currentStateNumber;
+           currentStateNumber++;
        }
-       //inicialnode
-       oldContent = oldContent +"\"<E>\" "+"20 " +"300 "+cont+" " 
-                        +nodes+System.lineSeparator();
-       //inicial node
-       oldContent = oldContent +"\" \" "+ "900 " + "300 "+"0 "
+       oldContent = oldContent +" "+ System.lineSeparator();
+       
+       //final node
+        oldContent = oldContent +"\" \" "+ "1000 " + "300 "+"0 "
                                +System.lineSeparator();
-       int k=0;
-       int j=0;
-       for(Episode ep: episodes){
-           int i=0;
-           
-           for(Event ev: ep.getSequenceEvents()){
-              
-               if(i<ep.getSequenceEvents().size()-1){
-                   
-                   //if(k==0){
-                        //oldContent = oldContent +"\""+ ev.getEventType()+"\" "+ (110*i+20) +" " +(35*j+30) +" "+"1 " 
-                        //+"2 "+System.lineSeparator();
-                   
-                        //oldContent = oldContent +"\" \" "+ "900 " + "300 "+"0 "
-                          //     +System.lineSeparator();
-                       //k++;
-                       //System.out.println("k "+k);
-                   //}else{
-                        oldContent = oldContent +"\""+ ev.getEventType()+"\" "+ (110*i+120) +" " +(35*j+30) +" "+"1 " 
-                        +(k+3)+" "+System.lineSeparator();
-                        System.out.println("i "+i);
-                   //}
-                   
-                }else{//the final event on the epidode points to the final episode of the graph
-                   oldContent = oldContent +"\""+ ev.getEventType()+"\" "+ (110*i+120) +" " +(35*j+30) +" "+"1 "+"1 " 
-                        +System.lineSeparator();
-               }
-               i++;
-               k++;
+       
+       for(int i=0; i<solutionSize;i++){
+           if(i<solutionSize-1){
+                String estadosFilhos="";
+                int localStateNumber = currentStateNumber+solution.get(i).size();
+                for(String chave:solution.get(i+1).keySet()){
+                    estadosFilhos= estadosFilhos + " " + localStateNumber;
+                    localStateNumber++;
+                }
+                for(String chave:solution.get(i).keySet()){
+                    oldContent = oldContent + "\"" +chave+ "\"" + " posicaoX " + "posicaoY " + 
+                            solution.get(i+1).size() + estadosFilhos + " " + System.lineSeparator();
+                    currentStateNumber++;
+                }
+           }else{
+               for(String chave:solution.get(i).keySet()){
+                    oldContent = oldContent + "\"" +chave+ "\"" + " posicaoX " + "posicaoY " + 
+                            1 + " " + 1 + " " + System.lineSeparator();
+                    
+                }
            }
-           j++;
+           
        }
        System.out.println(oldContent);
-       graph=oldContent; 
-       
-        
     }
     
 }
