@@ -69,9 +69,9 @@ public class GrafosPresenter {
            imprimirEpidosios();
             Generalizer generalizer = new Generalizer();            
             ArrayList<Map<String,Integer>> solution = generalizer.gen(episodes);
-            Graph graph = new Graph();
+            graph = new Graph();
             graph.constructGraph(solution);
-            
+            saveGraph();
         } catch (IOException ex) {
             Logger.getLogger(GrafosPresenter.class.getName()).log(Level.SEVERE, null, ex);
         }

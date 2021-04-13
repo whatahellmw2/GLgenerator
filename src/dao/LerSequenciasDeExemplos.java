@@ -35,7 +35,7 @@ public class LerSequenciasDeExemplos {
                     new FileInputStream(file),"UTF-16LE"));
                  
                  String linha;
-                 Pattern p = Pattern.compile("\\{(.*?)\\}");//pega cada evento dentro de um episódio
+                 Pattern p = Pattern.compile("\\(\\{(.*?)\\}\\)|\\{(.*?)\\}");//pega cada evento dentro de um episódio
                  
                  while((linha = readFile.readLine())!= null){                 
                  Matcher m = p.matcher(linha);
@@ -44,13 +44,21 @@ public class LerSequenciasDeExemplos {
                  Episode newEpidose = new Episode();                 
                  int contPosition=0;
                  while(m.find()){
-                    Event newEvent = new Event();                    
-                    newEvent.setEventType(m.group(1));
-                    newEvent.setPosition(contPosition);
-                    GrafosPresenter.addEvent(newEvent);
-                    newEpidose.addSequenceEvents(newEvent);
+                    if((m.group(1)!=null && m.group(1).equals("S"))||(m.group(2)!=null && m.group(2).equals("S"))){
+                    }else{
+                        Event newEvent = new Event(); 
+                        if(m.group(1)!=null)
+                        newEvent.setEventType(m.group(1));
+                        else
+                        newEvent.setEventType(m.group(2));
+
+                        newEvent.setPosition(contPosition);
+                        GrafosPresenter.addEvent(newEvent);
+                        newEpidose.addSequenceEvents(newEvent);
+
+                        contPosition++;
+                    }
                     
-                    contPosition++;
                  }
                  newEpidose.setTamananho(contPosition);
                  GrafosPresenter.addEpisode(newEpidose);

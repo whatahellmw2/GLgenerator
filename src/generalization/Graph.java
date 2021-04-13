@@ -51,16 +51,21 @@ public class Graph {
            line=reader.readLine();
        }
        reader.close();
-       oldContent = oldContent + (solutionSize+2) + System.lineSeparator();//set number of nodes on the graph
+       int numeroDeNos=0;
+       for(Map<String,Integer> map: solution){
+           numeroDeNos=numeroDeNos+map.size();
+       }
+       
+       oldContent = oldContent + (numeroDeNos+2) + System.lineSeparator();//set number of nodes on the graph
        int f=0;
        //começa com 2 estados o inicial 0 e o final 1
        int currentStateNumber=1;       
        //palavraReconhecida posicaoX posicaoY numTransicoesSaída nosAlcançaveis
        
        //initial state
-       oldContent = oldContent + "<E>" + " 20" + " 300 " + solution.get(0).size();
+       oldContent = oldContent + "\"<E>\"" + " 20" + " 300 " + solution.get(0).size();
        for(String chaves:solution.get(0).keySet()){
-           oldContent = oldContent + " " + currentStateNumber;
+           oldContent = oldContent + " " + (currentStateNumber+1);
            currentStateNumber++;
        }
        oldContent = oldContent +" "+ System.lineSeparator();
@@ -68,8 +73,9 @@ public class Graph {
        //final node
         oldContent = oldContent +"\" \" "+ "1000 " + "300 "+"0 "
                                +System.lineSeparator();
-       
+       int xAxle = 50;
        for(int i=0; i<solutionSize;i++){
+            int yAxle = 30;
            if(i<solutionSize-1){
                 String estadosFilhos="";
                 int localStateNumber = currentStateNumber+solution.get(i).size();
@@ -77,21 +83,24 @@ public class Graph {
                     estadosFilhos= estadosFilhos + " " + localStateNumber;
                     localStateNumber++;
                 }
+                
                 for(String chave:solution.get(i).keySet()){
-                    oldContent = oldContent + "\"" +chave+ "\"" + " posicaoX " + "posicaoY " + 
+                    oldContent = oldContent + "\"" +chave+ "\" " + xAxle +" " + yAxle+" " + 
                             solution.get(i+1).size() + estadosFilhos + " " + System.lineSeparator();
                     currentStateNumber++;
+                    yAxle = yAxle+50;
                 }
            }else{
                for(String chave:solution.get(i).keySet()){
-                    oldContent = oldContent + "\"" +chave+ "\"" + " posicaoX " + "posicaoY " + 
+                    oldContent = oldContent + "\"" +chave+ "\" " + xAxle+" " + yAxle+" " + 
                             1 + " " + 1 + " " + System.lineSeparator();
-                    
+                    yAxle = yAxle+50;
                 }
            }
-           
+           xAxle = xAxle +50;
        }
        System.out.println(oldContent);
+       this.graph=oldContent;
     }
     
 }

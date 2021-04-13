@@ -14,17 +14,25 @@ import java.util.regex.Pattern;
  * @author thiago
  */
 public class EventAdapter {
-    public void adaptEvent(ArrayList<Event> events){
+    public void adaptEvent(ArrayList<Event> events){        
         for(Event ev: events){
-            detachLiteral(ev);            
-            detachLemma(ev);
-            detachGrammaticalCodes(ev);  
-            detachInflection(ev);
-                      
+            if(ev.getEventType().contains("{")){
+                ev.setEventType(ev.getEventType().replaceAll("\\}", ""));
+                ev.setEventType(ev.getEventType().replaceAll("\\{", ""));
+                detachLiteral(ev);
+                detachLemmaFromMultipleOptionsEvent(ev);
+                detachGrammaticalCodesFromMultipleOptionsEvent(ev);
+            }else{
+                detachLiteral(ev);            
+                detachLemma(ev);
+                detachGrammaticalCodes(ev);  
+                detachInflection(ev);                      
+            }
+            
         }
     }
     private void detachLiteral(Event ev){
-        Pattern p = Pattern.compile("(.*),");    
+        Pattern p = Pattern.compile("(.*?),");    
         Matcher m = p.matcher(ev.getEventType());
         if(m.find())            
         ev.setLiteral(m.group(1));
@@ -54,8 +62,36 @@ public class EventAdapter {
         if(m.find())            
         ev.setInflections(m.group(1));
     }
+   
+   
+    private void detachLemmaFromMultipleOptionsEvent(Event ev){
+    Pattern p = Pattern.compile(",(.*?)\\.");    
+        Matcher m = p.matcher(ev.getEventType());
+        String lema = "";
+        while(m.find()){            
+            lema=lema+"|"+m.group(1);
+        }            
+        ev.setLemma(lema.substring(1, lema.length()));        
     
-
+    }
     
-
+    private void detachGrammaticalCodesFromMultipleOptionsEvent(Event ev){
+            Pattern p = Pattern.compile("\\.(.*?)(:|\\|)");            
+            Matcher m = p.matcher(ev.getEventType());
+            String code = "";
+            while(m.find()){
+                code = code+"|"+m.group(1);
+                m.group(1);
+                m.group(2);
+            }            
+            ev.setGrammaticalCodes(code.substring(1, code.length()));            
+           
+    }
+        
+    private void detachInflectionFromMultipleOptionsEvent(Event ev){
+        Pattern p = Pattern.compile(":(.*)\\}"); 
+        Matcher m = p.matcher(ev.getEventType());
+        if(m.find())            
+        ev.setInflections(m.group(1));
+    }
 }

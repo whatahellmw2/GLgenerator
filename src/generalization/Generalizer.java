@@ -6,6 +6,7 @@
 package generalization;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -80,20 +81,28 @@ public class Generalizer {
             for(int i=0; i < episodes.size(); i++){               
                 Event event = episodes.get(i).getSequenceEvents().get(j);
                        
-                frequencyByProperties(mapLiteral, event.getLiteral());
-                frequencyByProperties(mapLema, event.getLemma());               
+                frequencyByProperties(mapLiteral, event.getLiteral());                ;               
                 frequencyByProperties(mapFlexoes, event.getInflections());
                 
-                if (event.getEventType().contains("|")){
+                if (event.getEventType().contains("|")){                    
                     
-                    String[] splited=event.getGrammaticalCodes().split("\\|");                    
-                    for(int k=0; k<splited.length;k++){
-                       splited[k] = splited[k].replaceAll(":.*", "");
-                        frequencyByProperties(mapCodigos, splited[k]);
+                    String[] splited=event.getGrammaticalCodes().split("\\|");
+                    Set<String> propertiesSameEpisode = new HashSet<>(Arrays.asList(splited));                    
+                    for(String s: propertiesSameEpisode){
+                       s = s.replaceAll(":.*", "");
+                       frequencyByProperties(mapCodigos, s);
+                    }
+                    
+                    splited=event.getLemma().split("\\|");
+                    propertiesSameEpisode = new HashSet<>(Arrays.asList(splited));                    
+                    for(String s: propertiesSameEpisode){
+                       s = s.replaceAll(":.*", "");
+                       frequencyByProperties(mapLema, s);
                     }
                         
                 }else{
                      frequencyByProperties(mapCodigos, event.getGrammaticalCodes());
+                     frequencyByProperties(mapLema, event.getLemma());
                 }
                 
             }
@@ -124,6 +133,17 @@ public class Generalizer {
             System.out.println("\n");
         }
         filter(solution);
+        i = 1; 
+        System.out.println("filtrado");
+        for(Map<String,Integer> map: solution){
+            
+            System.out.println("posicao "+i);
+            map.forEach((chave,valor)->{
+                System.out.println("chave: "+chave+", valor: "+valor);
+            });
+            i++;
+            System.out.println("\n");
+        }
         return solution;        
     }
 }
