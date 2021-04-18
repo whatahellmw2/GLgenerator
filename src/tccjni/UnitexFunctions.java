@@ -11,6 +11,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fr.umlv.unitex.jni.UnitexJni;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 /**
@@ -46,12 +52,12 @@ public class UnitexFunctions {
           UnitexJni.execUnitexTool("UnitexTool " + cmdDico); 
       }
       public void Txt2Tfst(String othersResDir,String workingDicoFileName, String workingGraphFileName,String workingNormGrfFileName,String corpusPath,String corpusText){
-         String cmdTxt2Tfst = "Txt2Tfst " + UnitexJni.combineUnitexFileComponentWithQuote(corpusPath,"corpus.snt")+" -a " + UnitexJni.combineUnitexFileComponentWithQuote(othersResDir,"Alphabet.txt") + " --clean"; 
+         String cmdTxt2Tfst = "Txt2Tfst " + UnitexJni.combineUnitexFileComponentWithQuote(corpusPath,"corpus.snt")+" -a " + UnitexJni.combineUnitexFileComponentWithQuote(othersResDir,"Alphabet.txt") + " --clean"+" -qutf8-no-bom"; 
          UnitexJni.execUnitexTool("UnitexTool " + cmdTxt2Tfst);
       }
       
       public void Tfst2Grf(String othersResDir,String workingDicoFileName, String workingGraphFileName,String workingNormGrfFileName,String corpusPath,String corpusText){
-          String cmdTfst2Grf = "Tfst2Grf " + UnitexJni.combineUnitexFileComponentWithQuote(UnitexJni.combineUnitexFileComponent(corpusPath,"corpus_snt"),"text.tfst")+" -s1";
+          String cmdTfst2Grf = "Tfst2Grf " + UnitexJni.combineUnitexFileComponentWithQuote(UnitexJni.combineUnitexFileComponent(corpusPath,"corpus_snt"),"text.tfst")+" -s1 -qutf8-no-bom";
           UnitexJni.execUnitexTool("UnitexTool " + cmdTfst2Grf);
       }
       public void Grf2Fst2(String othersResDir,String workingDicoFileName, String workingGraphFileName,String workingNormGrfFileName,String corpusPath,String corpusText){
@@ -83,19 +89,16 @@ public class UnitexFunctions {
           //implodeTfst(corpusPath);
           
           Tfst2Grf(othersResDir, workingDicoFileName, workingGraphFileName, workingNormGrfFileName, corpusPath, corpusText);
-          Grf2Fst2(othersResDir, workingDicoFileName, workingGraphFileName, workingNormGrfFileName, corpusPath, corpusText);
-          Fst2List(othersResDir, workingDicoFileName, workingGraphFileName, workingNormGrfFileName, corpusPath, corpusText);
+//          Grf2Fst2(othersResDir, workingDicoFileName, workingGraphFileName, workingNormGrfFileName, corpusPath, corpusText);
+//          Fst2List(othersResDir, workingDicoFileName, workingGraphFileName, workingNormGrfFileName, corpusPath, corpusText);
           
          
           String merged =  UnitexJni.getUnitexFileString(UnitexJni.combineUnitexFileComponent(corpusPath,"corpus.txt"));
           String xml = UnitexJni.getUnitexFileString(UnitexJni.combineUnitexFileComponent(corpusPath,"corpus_snt","concord.xml"));
           return xml;
       }
-      public void configUnitex(String [] args, String text, int nbCosrpusWorkPath) {
-          
-        //exemplos = ExemplosCollection.getListaExemplos();
-        //System.out.println(UnitexJni.combineUnitexFileComponent("A","b","c"));
-        //System.out.println(UnitexJni.combineUnitexFileComponentWithQuote("b","c"));
+      public void configUnitex(String [] args, String text, int nbCosrpusWorkPath) {        
+      
 		
         System.out.println("is ms-windows:"+UnitexJni.isUnderWindows()+" : "+System.getProperty("os.name")+ " "+java.io.File.separator);
         System.out.println("Usage : UnitexJniDemo [ressource_dir] [base_work_dir] [nb_loop] [param]");
@@ -194,7 +197,8 @@ public class UnitexFunctions {
 
         System.out.println("will work on "+CorpusWorkPath);
         UnitexJni.createUnitexFolder(CorpusWorkPath);
-        UnitexJni.createUnitexFolder(UnitexJni.combineUnitexFileComponent(CorpusWorkPath,"corpus_snt"));
+        String processingFiles = UnitexJni.combineUnitexFileComponent(CorpusWorkPath,"corpus_snt");
+        UnitexJni.createUnitexFolder(processingFiles);
         String res="";
 
         long startT = System.currentTimeMillis();
@@ -218,7 +222,30 @@ public class UnitexFunctions {
             UnitexJni.freePersistentDictionary(workingDicoFileName);
             UnitexJni.freePersistentFst2(workingGraphFileName);
         }
+        //criação das variáveis nome do arquivo e PATH
 
+        System.out.println("\n\n########################################");
+        String arg1 =  processingFiles+"/cursentence.grf";
+        arg1 = arg1.replaceFirst("\\./", "");
+        String arg2 =  CorpusWorkPath+"/list.txt";
+        arg2 = arg2.replaceFirst("\\./", "");
+        String[] cmd = {"./script.sh", arg1, arg2};
+          System.out.println("SHELL SCRIPT "+"./script.sh "+arg1+" "+arg2);
+           BufferedReader br = null;
+          try {
+            //tratamento de erro e execução do script
+            Process process = Runtime.getRuntime().exec(cmd);
+            final InputStream is = process.getInputStream();
+            final InputStreamReader isr = new InputStreamReader(is);
+            br = new BufferedReader(isr);
+            String line;
+            while((line = br.readLine()) != null) {
+                System.out.println("Retorno do comando = [" + line + "]");
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(UnitexFunctions.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        System.out.println("########################################");
         System.out.println("");
         System.out.println("result:");
         System.out.println(res);

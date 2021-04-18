@@ -1,1 +1,0 @@
-{João,joão.N+Pr:ms} {é,ser.V:P3s} ({bonito,.A:ms}|{bonito,.ADV}|{bonito,.N:ms}) . {S}

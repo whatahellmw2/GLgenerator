@@ -1,1 +1,0 @@
-{Luana,luana.N+Pr:fs} {é,ser.V:P3s} ({advogada,advogado.A:fs}|{advogada,advogado.N:fs}|{advogada,advogar.V:Kfs}) . {S}

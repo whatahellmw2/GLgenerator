@@ -32,7 +32,7 @@ public class LerSequenciasDeExemplos {
                  File file = new File ("../tccjni/workUnitex"+i+"/list.txt");                 
                  
                  BufferedReader readFile = new BufferedReader(new InputStreamReader(
-                    new FileInputStream(file),"UTF-16LE"));
+                    new FileInputStream(file),"UTF-8"));
                  
                  String linha;
                  Pattern p = Pattern.compile("\\(\\{(.*?)\\}\\)|\\{(.*?)\\}");//pega cada evento dentro de um episódio
