@@ -90,19 +90,19 @@ public class Generalizer {
                     Set<String> propertiesSameEpisode = new HashSet<>(Arrays.asList(splited));                    
                     for(String s: propertiesSameEpisode){
                        s = s.replaceAll(":.*", "");
-                       frequencyByProperties(mapCodigos, s);
+                       frequencyByProperties(mapCodigos, "<"+s+">");
                     }
                     
                     splited=event.getLemma().split("\\|");
                     propertiesSameEpisode = new HashSet<>(Arrays.asList(splited));                    
                     for(String s: propertiesSameEpisode){
                        s = s.replaceAll(":.*", "");
-                       frequencyByProperties(mapLema, s);
+                       frequencyByProperties(mapLema, "<"+s+">");
                     }
                         
                 }else{
-                     frequencyByProperties(mapCodigos, event.getGrammaticalCodes());
-                     frequencyByProperties(mapLema, event.getLemma());
+                     frequencyByProperties(mapCodigos, "<"+event.getGrammaticalCodes()+">");
+                     frequencyByProperties(mapLema, "<"+event.getLemma()+">");
                 }
                 
             }
@@ -117,7 +117,7 @@ public class Generalizer {
                solution.add(mapLiteral);
            }else if(lemaMaxFrequency>codeMaxFrequency || lemaMaxFrequency==tamanho){
                solution.add(mapLema);
-           }else {
+           }else {              
                solution.add(mapCodigos);
            }
         

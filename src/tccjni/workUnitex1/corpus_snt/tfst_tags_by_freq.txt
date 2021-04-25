@@ -1,6 +1,0 @@
-1.000000	.
-1.000000	{Luana,luana.N+Pr:fs}
-1.000000	{é,ser.V:P3s}
-0.333333	{advogada,advogado.A:fs}
-0.333333	{advogada,advogado.N:fs}
-0.333333	{advogada,advogar.V:Kfs}

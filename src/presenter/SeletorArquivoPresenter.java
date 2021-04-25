@@ -19,6 +19,7 @@ public class SeletorArquivoPresenter {
 
     public SeletorArquivoPresenter(TelaPrincipalPresenter viewp) throws IOException{
         this.view = new SeletorArquivoView();
+        this.view.setLocationRelativeTo(null);
         selecionarArquivo(viewp);
         
     }

@@ -26,8 +26,8 @@ import presenter.GrafosPresenter;
  */
 public class LerSequenciasDeExemplos {
      public static void lerSquencias() throws IOException{
-         //for(int i=0; i<ExemplosCollection.getQuantidadeExemplos();i++){
-          for(int i=0; i<2;i++){
+         for(int i=0; i<ExemplosCollection.getQuantidadeExemplos();i++){
+          //for(int i=0; i<2;i++){
              try {
                  File file = new File ("../tccjni/workUnitex"+i+"/list.txt");                 
                  

@@ -34,6 +34,7 @@ public class ExemplosPresenter {
                 editarExemplos(collectionp);
             }
         });
+        this.view.setLocationRelativeTo(null);
         this.view.setVisible(true);
     }
     

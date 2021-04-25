@@ -1,6 +1,0 @@
-1.000000	.
-1.000000	{João,joão.N+Pr:ms}
-1.000000	{é,ser.V:P3s}
-0.333333	{bonito,bonito.A:ms}
-0.333333	{bonito,bonito.ADV}
-0.333333	{bonito,bonito.N:ms}

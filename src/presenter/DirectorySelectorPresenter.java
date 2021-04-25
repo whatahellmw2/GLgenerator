@@ -21,7 +21,8 @@ public class DirectorySelectorPresenter {
      private DirectorySelectorView view;
 
     public DirectorySelectorPresenter() throws IOException{
-        this.view = new DirectorySelectorView();       
+        this.view = new DirectorySelectorView();
+        this.view.setLocationRelativeTo(null);
         
     }
     public File selectFolder() throws IOException{

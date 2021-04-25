@@ -12,6 +12,9 @@ import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
@@ -65,57 +68,84 @@ public class TelaPrincipalPresenter {
                 gerarGramatica();
             }
         });
+        this.view.getLimparExemplosOption().addActionListener(new java.awt.event.ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                limparExemplo();
+            }
+            
+        });
+        this.view.getFontSpinner().addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent arg0) {
+               view.getCaixaTexto().setFont(new Font(view.getCaixaTexto().getFont().getFamily(),
+                       Font.PLAIN, (int) view.getFontSpinner().getValue()));
+            }
+        });
+        this.view.setLocationRelativeTo(null);
         this.view.setVisible(true);
         
     }
-  
+    public void limparExemplo(){
+        collection.zeraExemplos();
+    }
     public void lerTexto(){
+        limparExemplo();
         SeletorArquivoPresenter carregar;
         try {
            carregar = new SeletorArquivoPresenter(this);
-
+            
        } catch (IOException ex) {
            Logger.getLogger(TelaPrincipalPresenter.class.getName()).log(Level.SEVERE, null, ex);
        }
     }
     public void escreverTextoNaCaixa(String textop){
-        this.view.getCaixaTexto().setText(textop);      
+        StyleContext sc = new StyleContext();
+        Style style = sc.addStyle("style", null);
+        Font font = new Font("Arial", Font.PLAIN, 14);
+        StyleConstants.setFontSize(style, 14);
+        StyleConstants.setForeground(style, Color.BLACK);
+        StyleConstants.setFontFamily(style, font.getFamily());
+        StyleConstants.setBold(style, false);
+        try {
+            this.view.getCaixaTexto().getDocument().remove(0,this.view.getCaixaTexto().getText().length());
+            this.view.getCaixaTexto().getDocument().insertString(0, textop, style);
+        } catch (BadLocationException ex) {
+            Logger.getLogger(TelaPrincipalPresenter.class.getName()).log(Level.SEVERE, null, ex);
+        }
+       
        
     }
     public void salvarExemplo(){
-        collection.salvarExemplo(this.view.getCaixaTexto().getSelectedText());
-        
-        Document doc = this.view.getCaixaTexto().getDocument();
-
-        StyleContext sc = new StyleContext();
-        Style style = sc.addStyle("yourStyle", null);
-
-        Font font = new Font("Arial", Font.BOLD, 18);
-
-        StyleConstants.setForeground(style, Color.RED);
-        StyleConstants.setFontFamily(style, font.getFamily());
-        StyleConstants.setBold(style, true);
+       
         String selected = this.view.getCaixaTexto().getSelectedText();
-        int start = this.view.getCaixaTexto().getSelectionStart();
-        int end = this.view.getCaixaTexto().getSelectionEnd();
-        String startSubString= this.view.getCaixaTexto().getText().substring(0, start);
-        String endSubString= this.view.getCaixaTexto().getText().substring(end,this.view.getCaixaTexto().getText().length() );
-        //System.out.println("substring inicial: "+startSubString);
-        //System.out.println("substring final: "+endSubString);
-        try {
-                Style s1 = this.view.getCaixaTexto().getStyle(startSubString);
-                Style s2 = this.view.getCaixaTexto().getStyle(endSubString);
-                //System.out.println("start: "+start+"end: "+end);
-                doc.remove(startSubString.length(), selected.length());
-                //doc.insertString(0, startSubString, s1);
-                //doc.insertString(startSubString.length(),selected, style);
-                
-                //doc.insertString(startSubString.length()+selected.length(), endSubString, s2);
-                doc.insertString(start,selected, style);
-            } catch (BadLocationException ex) {
-                Logger.getLogger(TelaPrincipalPresenter.class.getName()).log(Level.SEVERE, null, ex);
-            }
-    
+        if(selected != null){
+            collection.salvarExemplo(selected);
+            Document doc = this.view.getCaixaTexto().getDocument();
+            StyleContext sc = new StyleContext();
+            Style style = sc.addStyle("yourStyle", null);
+
+            Font font = new Font("Arial", Font.BOLD, 18);
+
+            StyleConstants.setForeground(style, Color.RED);
+            StyleConstants.setFontFamily(style, font.getFamily());
+            StyleConstants.setBold(style, true);        
+            int start = this.view.getCaixaTexto().getSelectionStart();
+            int end = this.view.getCaixaTexto().getSelectionEnd();
+            String startSubString= this.view.getCaixaTexto().getText().substring(0, start);
+            String endSubString= this.view.getCaixaTexto().getText().substring(end,this.view.getCaixaTexto().getText().length() );
+            //System.out.println("substring inicial: "+startSubString);
+            //System.out.println("substring final: "+endSubString);
+            try {
+                    Style s1 = this.view.getCaixaTexto().getStyle(startSubString);
+                    Style s2 = this.view.getCaixaTexto().getStyle(endSubString);
+                    //System.out.println("start: "+start+"end: "+end);
+                    doc.remove(startSubString.length(), selected.length());                
+                    doc.insertString(start,selected, style);
+                } catch (BadLocationException ex) {
+                    Logger.getLogger(TelaPrincipalPresenter.class.getName()).log(Level.SEVERE, null, ex);
+                }
+        }
     }
     
     public void exibirExemplos(){
@@ -123,6 +153,10 @@ public class TelaPrincipalPresenter {
     }
     public void gerarGramatica(){
         GrafosPresenter gpresenter = new GrafosPresenter();
-       gpresenter.constructGraph();
+        try {
+            gpresenter.constructGraph();
+        } catch (Exception ex) {
+           JOptionPane.showMessageDialog(null, "Essa versão não é capaz de generalizar episódios de tamanhos diferentes");
+        }
     }
 }

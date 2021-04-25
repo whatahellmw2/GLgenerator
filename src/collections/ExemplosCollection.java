@@ -33,5 +33,8 @@ public class ExemplosCollection {
     public static int getQuantidadeExemplos(){
         return listaExemplos.size();
     }
+    public void zeraExemplos(){
+        this.listaExemplos = new ArrayList<>();
+    }
     
 }

@@ -56,7 +56,7 @@ public class GrafosPresenter {
             }
            System.out.println("\n\n");
     }
-    public void constructGraph(){
+    public void constructGraph() throws Exception{
         this.createFSTList();
         try {
             LerSequenciasDeExemplos.lerSquencias();          
@@ -67,15 +67,20 @@ public class GrafosPresenter {
                adapter.adaptEvent(ep.getSequenceEvents()); 
             }
            imprimirEpidosios();
-            Generalizer generalizer = new Generalizer();            
-            ArrayList<Map<String,Integer>> solution = generalizer.gen(episodes);
-            graph = new Graph();
-            graph.constructGraph(solution);
-            saveGraph();
+            Generalizer generalizer = new Generalizer();
+            if(generalizer.isSameLength(episodes)){
+                ArrayList<Map<String,Integer>> solution = generalizer.gen(episodes);
+                graph = new Graph();
+                graph.constructGraph(solution);
+                saveGraph();
+            }else{
+             throw new Exception("nao tem mesmo tamanho");
+            }
+            
         } catch (IOException ex) {
             Logger.getLogger(GrafosPresenter.class.getName()).log(Level.SEVERE, null, ex);
         }
-        //deleteFiles();
+        deleteFiles();
     }
     public void saveGraph() throws IOException{
         DirectorySelectorPresenter selector= new DirectorySelectorPresenter();
