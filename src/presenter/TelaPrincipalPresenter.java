@@ -9,6 +9,7 @@ import collections.ExemplosCollection;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -82,6 +83,13 @@ public class TelaPrincipalPresenter {
                        Font.PLAIN, (int) view.getFontSpinner().getValue()));
             }
         });
+        this.view.getSearchBtn().addActionListener(new java.awt.event.ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+                view.hightLight(view.getSearchTxtField().getText());
+            }
+        });
+        
         this.view.setLocationRelativeTo(null);
         this.view.setVisible(true);
         
@@ -102,8 +110,7 @@ public class TelaPrincipalPresenter {
     public void escreverTextoNaCaixa(String textop){
         StyleContext sc = new StyleContext();
         Style style = sc.addStyle("style", null);
-        Font font = new Font("Arial", Font.PLAIN, 14);
-        StyleConstants.setFontSize(style, 14);
+        Font font = new Font("Arial", Font.PLAIN, 14);       
         StyleConstants.setForeground(style, Color.BLACK);
         StyleConstants.setFontFamily(style, font.getFamily());
         StyleConstants.setBold(style, false);

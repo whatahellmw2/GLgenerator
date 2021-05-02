@@ -5,11 +5,17 @@
  */
 package view;
 
+import java.awt.Color;
+import javax.swing.JButton;
 import javax.swing.JEditorPane;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JSpinner;
+import javax.swing.JTextField;
 import javax.swing.JTextPane;
+import javax.swing.text.DefaultHighlighter;
+import javax.swing.text.Document;
+import javax.swing.text.Highlighter;
 
 /**
  *
@@ -38,8 +44,12 @@ public class TelaPrincipalView extends javax.swing.JFrame {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         caixaTexto = new javax.swing.JTextPane();
-        fontSpinner = new javax.swing.JSpinner();
+        jToolBar1 = new javax.swing.JToolBar();
         jLabel1 = new javax.swing.JLabel();
+        fontSpinner = new javax.swing.JSpinner();
+        jLabel2 = new javax.swing.JLabel();
+        searchBtn = new javax.swing.JButton();
+        searchTxtField = new javax.swing.JTextField();
         jMenuBar1 = new javax.swing.JMenuBar();
         menuTexto = new javax.swing.JMenu();
         carregarTextoOp = new javax.swing.JMenuItem();
@@ -47,17 +57,37 @@ public class TelaPrincipalView extends javax.swing.JFrame {
         selecionarExemplosOp = new javax.swing.JMenuItem();
         exibirExemplosOp = new javax.swing.JMenuItem();
         limparExemplosOption = new javax.swing.JMenuItem();
-        jMenu1 = new javax.swing.JMenu();
+        menuGramática = new javax.swing.JMenu();
         gerarGramaticaOp = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("GGL-Unitex");
+        setTitle("Gerador de GL");
 
+        caixaTexto.setMaximumSize(new java.awt.Dimension(2000, 4096));
         jScrollPane1.setViewportView(caixaTexto);
 
-        fontSpinner.setValue(14);
+        jToolBar1.setRollover(true);
+        jToolBar1.setEnabled(false);
 
-        jLabel1.setText("Fonte");
+        jLabel1.setText("Fonte ");
+        jToolBar1.add(jLabel1);
+
+        fontSpinner.setValue(14);
+        fontSpinner.setMaximumSize(new java.awt.Dimension(100, 100));
+        jToolBar1.add(fontSpinner);
+
+        jLabel2.setText("      ");
+        jToolBar1.add(jLabel2);
+
+        searchBtn.setText("Pesquisar");
+        searchBtn.setEnabled(false);
+        searchBtn.setFocusable(false);
+        searchBtn.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        searchBtn.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(searchBtn);
+
+        searchTxtField.setMaximumSize(new java.awt.Dimension(250, 100));
+        jToolBar1.add(searchTxtField);
 
         menuTexto.setText("Texto");
 
@@ -81,13 +111,13 @@ public class TelaPrincipalView extends javax.swing.JFrame {
 
         jMenuBar1.add(exemplosMenu);
 
-        jMenu1.setText("Gramática");
+        menuGramática.setText("Gramática");
 
         gerarGramaticaOp.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_G, java.awt.event.InputEvent.CTRL_DOWN_MASK));
         gerarGramaticaOp.setText("Gerar Gramática");
-        jMenu1.add(gerarGramaticaOp);
+        menuGramática.add(gerarGramaticaOp);
 
-        jMenuBar1.add(jMenu1);
+        jMenuBar1.add(menuGramática);
 
         setJMenuBar(jMenuBar1);
 
@@ -95,27 +125,18 @@ public class TelaPrincipalView extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap(463, Short.MAX_VALUE)
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(fontSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addComponent(jScrollPane1)))
-                .addContainerGap())
+            .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 581, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addComponent(jScrollPane1)
+                .addGap(20, 20, 20))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(fontSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 313, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(13, 13, 13)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 313, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -135,11 +156,15 @@ public class TelaPrincipalView extends javax.swing.JFrame {
     private javax.swing.JSpinner fontSpinner;
     private javax.swing.JMenuItem gerarGramaticaOp;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JMenu jMenu1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JToolBar jToolBar1;
     private javax.swing.JMenuItem limparExemplosOption;
+    private javax.swing.JMenu menuGramática;
     private javax.swing.JMenu menuTexto;
+    private javax.swing.JButton searchBtn;
+    private javax.swing.JTextField searchTxtField;
     private javax.swing.JMenuItem selecionarExemplosOp;
     // End of variables declaration//GEN-END:variables
     
@@ -178,5 +203,47 @@ public class TelaPrincipalView extends javax.swing.JFrame {
     public JMenuItem getSelecionarExemplosOp() {
         return selecionarExemplosOp;
     }
+
+    public JButton getSearchBtn() {
+        return searchBtn;
+    }
+
+    public JTextField getSearchTxtField() {
+        return searchTxtField;
+    }
     
+    class MyHighlighterPainter extends DefaultHighlighter.DefaultHighlightPainter{
+        public MyHighlighterPainter(Color color){
+            super(color);
+        }        
+    }
+        
+        Highlighter.HighlightPainter myHighlightPainter = new MyHighlighterPainter(new Color(112, 205, 255));
+        public void hightLight(String pattern){
+            removeHightLights();
+            try{
+                Highlighter hilite = caixaTexto.getHighlighter();
+                Document doc = caixaTexto.getDocument();
+                String text = doc.getText(0, doc.getLength());
+                int pos = 0;
+                while((pos=text.toUpperCase().indexOf(pattern.toUpperCase(),pos))>=0){
+                    hilite.addHighlight(pos, pos+pattern.length(), myHighlightPainter);
+                    pos += pattern.length();
+                }
+                
+            }
+            catch(Exception e){
+                System.out.println("Erro na busca");
+            }
+        }
+        public void removeHightLights(){
+            Highlighter hilite = caixaTexto.getHighlighter();
+            Highlighter.Highlight[] hilites = hilite.getHighlights();
+            for(int i =0;  i< hilites.length;i++){
+                if(hilites[i].getPainter() instanceof MyHighlighterPainter){
+                    hilite.removeHighlight(hilites[i]);
+                }
+            }
+                    
+        }
 }
