@@ -75,6 +75,15 @@ public class UnitexFunctions {
       public void deleteFolder(String folder){
           UnitexJni.removeUnitexFolder(folder);
       }
+      
+      public void locate(String corpusPath, String glPath){
+          String cmdLocate = "Locate"+ "-t "+ UnitexJni.combineUnitexFileComponentWithQuote(corpusPath,"corpus.snt") +glPath + " -a "+"/home/thiago/workspace/Unitex-GramLab/Unitex/Portuguese (Brazil)/Alphabet.txt" + "-L -I -n200 -b -Y --stack_max=1000 --max_matches_per_subgraph=200 --max_matches_at_token_pos=400 --max_errors=50 -qutf8-no-bom";
+      }
+      
+      public void concord(String corpusPath,String othersResDir){
+          String cmConcord = "Concord" + UnitexJni.combineUnitexFileComponentWithQuote(corpusPath,"concord.ind") + "-fCourier new" + "-s12 -l40 -r55 --html" + " -a "+ UnitexJni.combineUnitexFileComponentWithQuote(othersResDir,"Alphabet.txt") + "--CL -qutf8-no-bom";
+      }
+      
       private String processUnitexWork(String othersResDir,String workingDicoFileName, String workingGraphFileName,String workingNormGrfFileName,String corpusPath,String corpusText)
       {
           String pSep = pathSeparator;

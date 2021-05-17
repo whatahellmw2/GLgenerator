@@ -29,8 +29,8 @@ public class LerSequenciasDeExemplos {
          for(int i=0; i<ExemplosCollection.getQuantidadeExemplos();i++){
           //for(int i=0; i<2;i++){
              try {
-                 File file = new File ("../tccjni/workUnitex"+i+"/list.txt");                 
-                 
+                 //File file = new File ("../tccjni/workUnitex"+i+"/list.txt");                 
+                 File file = new File ("workUnitex"+i+"/list.txt");                 
                  BufferedReader readFile = new BufferedReader(new InputStreamReader(
                     new FileInputStream(file),"UTF-8"));
                  

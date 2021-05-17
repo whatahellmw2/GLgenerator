@@ -57,8 +57,9 @@ public class Generalizer {
    }
     
     public void filter(ArrayList<Map<String,Integer>> solution){
-         ArrayList<String> chaves= new ArrayList<>();
+         
          for(Map<String,Integer> map: solution){
+             ArrayList<String> chaves= new ArrayList<>();
              int maxValue= Collections.max(map.values());
              map.forEach((chave,valor)->{
                  if(valor<maxValue)

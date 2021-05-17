@@ -70,6 +70,7 @@ public class Graph {
        }
        oldContent = oldContent +" "+ System.lineSeparator();
        
+       currentStateNumber = 2;
        //final node
         oldContent = oldContent +"\" \" "+ "1000 " + "300 "+"0 "
                                +System.lineSeparator();

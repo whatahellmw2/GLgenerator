@@ -32,9 +32,10 @@ public class TelaPrincipalPresenter {
     private ExemplosCollection collection = new ExemplosCollection();
     
     public static void main(String args[]) {
-        System.setProperty("java.library.path", "/home/thiago/NetBeansProjects/GLgenerator/src/tccjni/");
-        //System.out.println(System.getProperty("java.library.path"));
-        
+        System.setProperty("java.library.path", System.getProperty("user.dir"));
+        System.out.println(System.getProperty("java.library.path"));
+        //System.loadLibrary("UnitexJni");        
+        System.load(System.getProperty("user.dir")+"/"+"libUnitexJni.so");
         new TelaPrincipalPresenter();
         
     }
@@ -88,6 +89,17 @@ public class TelaPrincipalPresenter {
             public void actionPerformed(ActionEvent arg0) {
                 view.hightLight(view.getSearchTxtField().getText());
             }
+        });
+        this.view.getSearchTxtField().addKeyListener(new java.awt.event.KeyAdapter() {
+            @Override
+            public void keyTyped(KeyEvent arg0) {
+               if((arg0.getKeyChar()=='\b'|| arg0.getKeyChar() == '\u007f') && view.getSearchTxtField().getText().length()==0){
+                   view.getSearchBtn().setEnabled(false);
+               }else{
+                   view.getSearchBtn().setEnabled(true);
+               }
+            }
+            
         });
         
         this.view.setLocationRelativeTo(null);
